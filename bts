@@ -1,0 +1,53 @@
+1. What Was Done Here?
+Using your dataset (apple_products_pricing_2020_2026.csv), a full data aggregation and exploratory visual analysis was conducted.
+
+Instead of looking at thousands of raw pricing rows, the data was processed to answer two major strategic business questions:
+
+- Value Depreciation: How well do different Apple product categories (Mac, iPhone, iPad, Watch) hold their value relative to their original launch price, and how does item condition (New vs. Renewed/Refurbished) affect that retention?
+- Promotional Event Effectiveness: How much deeper are discounts during major annual e-commerce flash sales (Big Billion Days, Prime Day, Great Indian Festival, Black Friday) compared to standard baseline pricing on Regular Days?
+
+2. What Are the Visuals For?
+These charts translate complex numerical metrics into immediate, scannable business stories for stakeholders or hiring managers:
+
+- Executive Scannability: Rather than forcing someone to read through a raw table of averages, bar heights and exact text annotations instantly convey key percentages.
+- Comparison & Segmentation: They allow quick visual benchmarking—for instance, immediately noticing that Macs hold value better than Apple Watches, or that Big Billion Days delivers nearly double the discount of regular sales days.
+
+3. What Code Made This Happen?
+The visualizations were created in Python using pandas for data aggregation and seaborn / matplotlib for chart rendering.
+
+Code Logic Breakdown:
+A. Data Preparation & Feature Engineering:
+# 1. Fill missing event names with 'Regular Days'
+df['Sale_Event_Cleaned'] = df['Sale_Event'].fillna('Regular Days')
+
+# 2. Calculate the Price Retention metric
+df['Price_Retention_Pct'] = (df['Current_Price_USD'] / df['Launch_Price_USD']) * 100
+
+B. Plotting Chart 1 (Promotional Event Discounts):
+# Aggregate average discount by promotional event and sort descending
+sale_order = df.groupby('Sale_Event_Cleaned')['Discount_Pct'].mean().sort_values(ascending=False).index
+
+sns.barplot(
+    data=df,
+    y='Sale_Event_Cleaned',  # Horizontal orientation
+    x='Discount_Pct',
+    order=sale_order,
+    palette='magma'          # Color gradient palette
+)
+
+# Loop through bars to display exact percentage labels (37.0%, 34.4%, etc.)
+
+C. Plotting Chart 2 (Price Retention by Category & Condition):
+# Group by Category and Condition to compute average price retention
+cat_cond_df = df.groupby(['Product_Category', 'Condition'])['Price_Retention_Pct'].mean().reset_index()
+
+sns.barplot(
+    data=cat_cond_df,
+    x='Product_Category',
+    y='Price_Retention_Pct',
+    hue='Condition',         # Grouped bars by New vs Refurbished
+    palette=['#345e7d', '#3caea3']
+)
+
+# Annotate exact percentage values on top of each vertical bar
+

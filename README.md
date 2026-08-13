@@ -5,5 +5,7 @@ Welcome to my portfolio repository. This collection highlights end-to-end data c
 
 Featured Projects
 1. End-to-End Data Analysis
-2. Analytics Engineering with dbt
-3. Advanced Analysis: A/B Testing & Cohort Retention
+[bts-end-to-end-analysis.md](https://github.com/user-attachments/files/31020758/bts-end-to-end-analysis.md)
+
+3. Analytics Engineering with dbt
+4. Advanced Analysis: A/B Testing & Cohort Retention
